@@ -1,15 +1,20 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <h1>Task Switcher</h1>
+  <p>Making your day easier to manage</p>
+  <p>
+    Start a new task by entering a description in the box below followed by
+    enter.
+  </p>
+  <JobChange />
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import HelloWorld from "./components/HelloWorld.vue";
+import JobChange from "./components/JobChange.vue";
 
 @Options({
   components: {
-    HelloWorld,
+    JobChange,
   },
 })
 export default class App extends Vue {}
