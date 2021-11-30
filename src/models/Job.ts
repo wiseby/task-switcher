@@ -1,5 +1,7 @@
-export interface Job {
-  description: String;
+import { IEntity } from "@/utilities/Repositories/IEntity";
+
+export interface Job extends IEntity {
+  description: string;
   start: Date | null;
   stop: Date | null;
 }

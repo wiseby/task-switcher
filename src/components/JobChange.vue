@@ -14,6 +14,7 @@
 </template>
 
 <script lang="ts">
+import { JobRepository } from "@/utilities/Repositories/JobRepository";
 import { Vue, Options } from "vue-class-component";
 import { Job } from "../models/Job";
 
@@ -22,6 +23,7 @@ export default class JobChange extends Vue {
   currentjob: Job = { description: "", start: null, stop: null };
   jobInput = "";
   jobList: Job[] = [];
+  jobRepo: JobRepository = new JobRepository();
 
   addJob(): void {
     if (!this.jobInput) {
@@ -32,6 +34,9 @@ export default class JobChange extends Vue {
     newJob.start = new Date();
     this.jobList.push(newJob);
     this.jobInput = "";
+    const gotJob = this.jobRepo.get();
+    console.log('Got this job: ', gotJob);
+    this.jobRepo.add(newJob);
   }
 }
 </script>
