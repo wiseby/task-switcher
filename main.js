@@ -1,6 +1,8 @@
+/* eslint-disable */
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const fs = require('fs')
+/* eslint-enable */
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -32,14 +34,31 @@ app.on('window-all-closed', () => {
   })
 })
 
+ipcMain.on('WRITE_FILE', (event, args) => {
+  console.log('Receiving a request form frontend')
+  console.log('args: ', args)
+  fs.writeFile(`./data/${args.file}`, JSON.stringify(args.data), (error) => {
+    if (error) {
+      const errorMessage = `An error occured when writing file ${args.file} : ${error}`
+      console.log(errorMessage)
+      win.webContents.send('WRITE_FILE', { operationResponse: { message: errorMessage, status: 'error' }})
+    } else {
+      win.webContents.send('WRITE_FILE', { operationResponse: { message: '', status: 'success' }})
+    }
+  })
+});
+
 ipcMain.on('READ_FILE', (event, args) => {
   console.log('Receiving a request form frontend')
-  console.log('event: ', event)
   console.log('args: ', args)
-  fs.readFile('./data/test.json', (error, data) => {
-    // Do something with file contents
-
-    // Send result back to renderer process
-    win.webContents.send('READ_FILE', JSON.parse(data).message)
+  fs.readFile(`./data/${args.file}`, (error, data) => {
+    if (error) {
+      const errorMessage = `An error occured when reading file ${args.file} : ${error}`
+      console.log(errorMessage)
+      win.webContents.send('READ_FILE', { message: errorMessage, status: 'error' })
+    } else {
+      const jobs = JSON.parse(data);
+      win.webContents.send('READ_FILE', { data: jobs, message: '', status: 'success' })
+    }
   })
-})
+});

@@ -1,5 +1,7 @@
+/* eslint-disable */
 const { contextBridge, ipcRenderer } = require('electron')
-console.log('Running preload script')
+/* eslint-enable */
+
 const validChannels = ['READ_FILE', 'WRITE_FILE']
 contextBridge.exposeInMainWorld('api', {
     send: (channel, data) => {
